@@ -3,8 +3,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.34.jar"/>
-	<classpathentry kind="lib" path="lib/ElasticSearch/elasticsearch-1.4.2.jar"/>
-	<classpathentry kind="lib" path="lib/ElasticSearch/lucene-core-4.10.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
