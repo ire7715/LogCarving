@@ -36,6 +36,14 @@ public abstract class Log {
 	public abstract void send(int messageLabel, String message) throws Exception;
 	
 	/**
+	 * ends an exception information to the logging DB.
+	 * @param messageLabel : int, a label which represents the status of this exception. 
+	 * @param e : Exception, the raised exception.
+	 * @throws Exception
+	 */
+	public abstract void send(int messageLabel, Exception e) throws Exception;
+	
+	/**
 	 * get the line number of the error code occurred.
 	 * @param e : Exception, which exception to fetch.
 	 * @return int : line number.

@@ -72,4 +72,8 @@ public class SQLog extends Log {
 		stmt.close();
 	}
 
+	@Override
+	public void send(int messageLabel, Exception e) throws SQLException {
+		this.send(messageLabel, Log.buildMessage(this, e));
+	}
 }

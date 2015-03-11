@@ -33,7 +33,7 @@ public class ElasticLog extends Log{
 	}
 
 	@Override
-	public void establishConnection(Map<String, String> info) throws Exception {
+	public void establishConnection(Map<String, String> info) throws ElasticsearchException {
 		this.host = info.get("host");
 		this.index = info.get("index");
 		this.type = info.get("type");
@@ -49,7 +49,7 @@ public class ElasticLog extends Log{
 	}
 
 	@Override
-	public void send(int messageLabel, String message) throws Exception {
+	public void send(int messageLabel, String message) throws ElasticsearchException {
 		int i;
 		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
 		StringBuilder sb = new StringBuilder();
@@ -71,7 +71,8 @@ public class ElasticLog extends Log{
 		this.client.index(iR).actionGet();
 	}
 	
-	public void send(int messageLabel, Exception e) throws Exception {
+	@Override
+	public void send(int messageLabel, Exception e) throws ElasticsearchException {
 		int i;
 		StackTraceElement[] stack = e.getStackTrace();
 		StringBuilder sb = new StringBuilder();
