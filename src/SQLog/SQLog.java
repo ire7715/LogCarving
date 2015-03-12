@@ -1,7 +1,9 @@
-package logCarving;
+package SQLog;
 
 import java.util.Map;
 import java.sql.*;
+
+import logCarvingBase.Log;
 
 public class SQLog extends Log {
 	private Connection conn = null;

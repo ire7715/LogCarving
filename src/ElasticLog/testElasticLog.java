@@ -1,4 +1,4 @@
-package logCarving;
+package ElasticLog;
 
 import static org.junit.Assert.*;
 

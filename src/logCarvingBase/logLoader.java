@@ -1,9 +1,12 @@
-package logCarving;
+package logCarvingBase;
 
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import ElasticLog.ElasticLog;
+import SQLog.SQLog;
 
 public class logLoader {
 	public static SQLog SQLogger(String properties) throws Exception{

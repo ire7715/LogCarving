@@ -1,6 +1,8 @@
-package logCarving;
+package ElasticLog;
 
 import java.util.Map;
+
+import logCarvingBase.Log;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.index.IndexRequest;
