@@ -1,4 +1,4 @@
-package SQLog;
+package testing;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +9,8 @@ import java.util.Map;
 import logCarvingBase.Log;
 
 import org.junit.Test;
+
+import SQLog.SQLog;
 
 
 public class testSQLog {

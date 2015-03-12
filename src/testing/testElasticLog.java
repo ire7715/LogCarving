@@ -1,4 +1,4 @@
-package ElasticLog;
+package testing;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+
+import ElasticLog.ElasticLog;
 
 public class testElasticLog {
 
