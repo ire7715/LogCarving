@@ -12,4 +12,8 @@ public abstract class SQLogger extends Logger {
 			System.err.println("Logger initialize failed.");
 		}
 	}
+	
+	public void finalize(){
+		super.finalize();
+	}
 }
