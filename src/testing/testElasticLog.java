@@ -5,13 +5,16 @@ import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import logCarvingBase.Log;
+
 import org.junit.Test;
 
 import ElasticLog.ElasticLog;
+import ElasticLog.ElasticLogger;
 
 public class testElasticLog {
 
-	@Test
+	//@Test
 	public void test() {
 		ElasticLog elaLog = new ElasticLog();
 		Map<String, String> info = new HashMap<String, String>();
@@ -35,6 +38,34 @@ public class testElasticLog {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testLogger(){
+		class tester extends ElasticLogger{
+			public tester(){
+				super("properties.xml");
+			}
+			
+			public void touch(){
+				try {
+					this.logger.send(Log.ID_COMMENT, "12321312312312414");
+					System.err.println("12321312312312414");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			public void finalize(){
+				super.finalize();
+			}
+		}
+		
+		tester t1 = new tester();
+		t1.touch();
+		t1.finalize();
+		t1 = null;
 	}
 
 }
