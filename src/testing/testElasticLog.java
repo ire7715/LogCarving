@@ -17,7 +17,7 @@ public class testElasticLog {
 		Map<String, String> info = new HashMap<String, String>();
 		info.put("host", "0.0.0.0");
 		info.put("apiport", "0");
-		info.put("cluster_name", "TwitterDB");
+		info.put("cluster_name", "FacebookDB");
 		info.put("index", "logtest");
 		info.put("type", "logging");
 		
