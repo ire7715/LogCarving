@@ -14,7 +14,7 @@ import ElasticLog.ElasticLogger;
 
 public class testElasticLog {
 
-	//@Test
+	@Test
 	public void test() {
 		ElasticLog elaLog = new ElasticLog();
 		Map<String, String> info = new HashMap<String, String>();
@@ -40,7 +40,7 @@ public class testElasticLog {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testLogger(){
 		class tester extends ElasticLogger{
 			public tester(){

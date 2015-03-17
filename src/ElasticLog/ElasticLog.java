@@ -1,16 +1,22 @@
 package ElasticLog;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import logCarvingBase.Log;
 
 import org.elasticsearch.ElasticsearchException;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
+import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.xcontent.XContentFactory;
 
 public class ElasticLog extends Log{
 	
@@ -34,6 +40,37 @@ public class ElasticLog extends Log{
 		this.client.close();
 		this.client = null;
 	}
+	
+	protected boolean existedOrCreate(){
+		boolean hasIndex = this.client.admin().indices().exists(new IndicesExistsRequest(this.index)).actionGet().isExists();
+		if(!hasIndex){
+			StringBuilder mappingXContent = new StringBuilder();
+			mappingXContent.append("{");
+				//mappingXContent.append("\"mappings\": {");
+					mappingXContent.append("\"logging\": {");
+						mappingXContent.append("\"_timestamp\": {");
+							mappingXContent.append("\"enabled\":true, ");
+							//mappingXContent.append("\"path\": \"sent_date\"");
+							mappingXContent.append("\"store\": true");
+						mappingXContent.append("}");
+					mappingXContent.append("}");
+				//mappingXContent.append("}");
+			mappingXContent.append("}");
+			
+			/*XContentFactory.jsonBuilder()
+				.startObject()
+					.*/
+				
+			
+			/*IndexRequest ir = new IndexRequest(this.index);
+			ir.source(sb.toString());
+			this.client.index(ir).actionGet();*/
+			CreateIndexRequestBuilder cirBuilder = this.client.admin().indices().prepareCreate(this.index);
+			cirBuilder.addMapping(this.type, mappingXContent.toString());
+			cirBuilder.execute().actionGet();
+		}
+		return hasIndex;
+	}
 
 	@Override
 	public void establishConnection(Map<String, String> info) throws ElasticsearchException {
@@ -49,6 +86,7 @@ public class ElasticLog extends Log{
 				.put("client.transport.sniff",false)
 				.build();
 		this.client = new TransportClient(settings).addTransportAddress(new InetSocketTransportAddress(this.host, this.apiport));
+		
 	}
 
 	@Override
@@ -57,6 +95,7 @@ public class ElasticLog extends Log{
 		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
+			sb.append("\"timestamp\": " + Calendar.getInstance().getTime().getTime() + ", ");
 			sb.append("\"level\": \"" + messageLabel + "\",");
 			sb.append("\"type\": \"" + "Custome message" + "\",");
 			sb.append("\"message\": \"" + message + "\",");
@@ -71,7 +110,9 @@ public class ElasticLog extends Log{
 		
 		IndexRequest iR = new IndexRequest(this.index, this.type);
 		iR.source(sb.toString());
-		this.client.index(iR).actionGet();
+		this.client
+			.index(iR)
+			.actionGet();
 	}
 	
 	@Override
@@ -80,6 +121,7 @@ public class ElasticLog extends Log{
 		StackTraceElement[] stack = e.getStackTrace();
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
+			sb.append("\"timestamp\": " + Calendar.getInstance().getTime().getTime() + ", ");
 			sb.append("\"level\": \"" + messageLabel + "\",");
 			sb.append("\"type\": \"" + e.toString() + "\",");
 			sb.append("\"message\": \"" + e.getMessage() + "\",");
