@@ -98,12 +98,12 @@ public class ElasticLog extends Log{
 			sb.append("\"timestamp\": " + Calendar.getInstance().getTime().getTime() + ", ");
 			sb.append("\"level\": \"" + messageLabel + "\",");
 			sb.append("\"type\": \"" + "Custome message" + "\",");
-			sb.append("\"message\": \"" + message + "\",");
+			sb.append("\"message\": \"" + message.replace("\"", "\\\"") + "\",");
 			sb.append("\"stack\": [");
 				for(i = 0; i < stack.length; i++){
 					if(i != 0)
 						sb.append(",");
-					sb.append("\"" + stack[i].toString() + "\"");
+					sb.append("\"" + stack[i].toString().replace("\"", "\\\"") + "\"");
 				}
 			sb.append("]");
 		sb.append("}");
@@ -123,13 +123,13 @@ public class ElasticLog extends Log{
 		sb.append("{");
 			sb.append("\"timestamp\": " + Calendar.getInstance().getTime().getTime() + ", ");
 			sb.append("\"level\": \"" + messageLabel + "\",");
-			sb.append("\"type\": \"" + e.toString() + "\",");
-			sb.append("\"message\": \"" + e.getMessage() + "\",");
+			sb.append("\"type\": \"" + e.toString().replace("\"", "\\\"") + "\",");
+			sb.append("\"message\": \"" + e.getMessage().replace("\"", "\\\"") + "\",");
 			sb.append("\"stack\": [");
 				for(i = 0; i < stack.length; i++){
 					if(i != 0)
 						sb.append(",");
-					sb.append("\"" + stack[i].toString() + "\"");
+					sb.append("\"" + stack[i].toString().replace("\"", "\\\"") + "\"");
 				}
 			sb.append("]");
 		sb.append("}");
