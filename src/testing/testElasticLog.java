@@ -18,8 +18,8 @@ public class testElasticLog {
 	public void test() {
 		ElasticLog elaLog = new ElasticLog();
 		Map<String, String> info = new HashMap<String, String>();
-		info.put("host", "0.0.0.0");
-		info.put("apiport", "0");
+		info.put("host", "60.199.208.10");
+		info.put("apiport", "5566");
 		info.put("cluster_name", "FacebookDB");
 		info.put("index", "logtest");
 		info.put("type", "logging");

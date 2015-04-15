@@ -1,8 +1,6 @@
 package ElasticLog;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 import logCarvingBase.Log;
@@ -16,7 +14,8 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.common.xcontent.XContentFactory;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class ElasticLog extends Log{
 	
@@ -93,49 +92,37 @@ public class ElasticLog extends Log{
 	public void send(int messageLabel, String message) throws ElasticsearchException {
 		int i;
 		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
-			sb.append("\"timestamp\": " + Calendar.getInstance().getTime().getTime() + ", ");
-			sb.append("\"level\": \"" + messageLabel + "\",");
-			sb.append("\"type\": \"" + "Custome message" + "\",");
-			sb.append("\"message\": \"" + message.replace("\"", "\\\"") + "\",");
-			sb.append("\"stack\": [");
-				for(i = 0; i < stack.length; i++){
-					if(i != 0)
-						sb.append(",");
-					sb.append("\"" + stack[i].toString().replace("\"", "\\\"") + "\"");
-				}
-			sb.append("]");
-		sb.append("}");
+		JSONObject excPack = new JSONObject();
+		excPack.put("timestamp", Calendar.getInstance().getTime().getTime());
+		excPack.put("level", messageLabel);
+		excPack.put("type", "Custome message");
+		excPack.put("message", message);
+		JSONArray stackJSON = new JSONArray();
+		for(StackTraceElement ele: stack)
+			stackJSON.put(ele);
+		excPack.put("stack", stackJSON);
 		
 		IndexRequest iR = new IndexRequest(this.index, this.type);
-		iR.source(sb.toString());
-		this.client
-			.index(iR)
-			.actionGet();
+		iR.source(excPack.toString());
+		this.client.index(iR).actionGet();
 	}
 	
 	@Override
 	public void send(int messageLabel, Exception e) throws ElasticsearchException {
 		int i;
 		StackTraceElement[] stack = e.getStackTrace();
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
-			sb.append("\"timestamp\": " + Calendar.getInstance().getTime().getTime() + ", ");
-			sb.append("\"level\": \"" + messageLabel + "\",");
-			sb.append("\"type\": \"" + e.toString().replace("\"", "\\\"") + "\",");
-			sb.append("\"message\": \"" + e.getMessage().replace("\"", "\\\"") + "\",");
-			sb.append("\"stack\": [");
-				for(i = 0; i < stack.length; i++){
-					if(i != 0)
-						sb.append(",");
-					sb.append("\"" + stack[i].toString().replace("\"", "\\\"") + "\"");
-				}
-			sb.append("]");
-		sb.append("}");
-		
+		JSONObject excPack = new JSONObject();
+		excPack.put("timestamp", Calendar.getInstance().getTime().getTime());
+		excPack.put("level", messageLabel);
+		excPack.put("type", e.toString());
+		excPack.put("message", e.getMessage());
+		JSONArray stackJSON = new JSONArray();
+		for(StackTraceElement ele: stack)
+			stackJSON.put(ele);
+		excPack.put("stack", stackJSON);
+
 		IndexRequest iR = new IndexRequest(this.index, this.type);
-		iR.source(sb.toString());
+		iR.source(excPack.toString());
 		client.index(iR).actionGet();
 	}
 
