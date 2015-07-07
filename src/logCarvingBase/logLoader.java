@@ -12,7 +12,9 @@ public class logLoader {
 	public static SQLog SQLogger(String properties) throws Exception{
 		Properties props = new Properties();
 		Map<String, String> info = new HashMap<String, String>();
-		props.loadFromXML(new FileInputStream(properties));
+		FileInputStream propsStream = new FileInputStream(properties);
+		props.loadFromXML(propsStream);
+		propsStream.close();
 		
 		info.put("host", props.getProperty("logCarving_host"));
 		info.put("user", props.getProperty("logCarving_user"));
@@ -29,7 +31,9 @@ public class logLoader {
 	public static ElasticLog ElasticLogger(String properties) throws Exception {
 		Properties props = new Properties();
 		Map<String, String> info = new HashMap<String, String>();
-		props.loadFromXML(new FileInputStream(properties));
+		FileInputStream propsStream = new FileInputStream(properties);
+		props.loadFromXML(propsStream);
+		propsStream.close();
 		
 		info.put("host", props.getProperty("logCarving_host"));
 		info.put("apiport", props.getProperty("logCarving_apiport"));
