@@ -7,6 +7,8 @@ public abstract class Log {
 	public static final int ID_WARNING = 2;
 	public static final int ID_ERROR = 3;
 	
+	public static final long RECONNECT_WAIT = 5 * 60 * 1000;
+	
 	/**
 	 * Close the connection. 
 	 * finalize() is called implicitly, which is called by GC.

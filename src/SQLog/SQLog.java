@@ -42,10 +42,7 @@ public class SQLog extends Log {
 		table = additional.get("table");
 		labelCol = additional.get("label");
 		messageCol= additional.get("message");
-		conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + db, user, pass);
-		Statement stmt = conn.createStatement();
-		stmt.execute("SET NAMES utf8;");
-		stmt.close();
+		this.conn = this.connect();
 	}
 	
 	public void finalize(){
@@ -61,13 +58,42 @@ public class SQLog extends Log {
 	public void close(){
 		this.finalize();
 	}
+	
+	public boolean isConnected(){
+		try {
+			return (this.conn != null && !this.conn.isClosed());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	private Connection connect(){
+		while(!this.isConnected()){
+			try {
+				this.conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + db, user, pass);
+				Statement stmt = conn.createStatement();
+				stmt.execute("SET NAMES utf8;");
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				try {
+					Thread.sleep(Log.RECONNECT_WAIT);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+					return null;
+				}
+			}
+		}
+		return this.conn;
+	}
 
 	@Override
 	public void send(int messageLabel, String message) throws SQLException{
 		StringBuilder query = new StringBuilder();
 		query.append("INSERT INTO `" + this.table + "`(`" + labelCol + "`, `" + messageCol + "`)");
 		query.append("VALUES(?, ?)");
-		PreparedStatement stmt = this.conn.prepareStatement(query.toString());
+		PreparedStatement stmt = this.connect().prepareStatement(query.toString());
 		stmt.setInt(1, messageLabel);
 		stmt.setString(2, message);
 		stmt.executeUpdate();
