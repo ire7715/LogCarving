@@ -22,6 +22,8 @@ public class ElasticLog extends Log{
 	private String host = null;
 	private String cluster_name = null;
 	private int apiport = 0;
+	private String user = null;
+	private String pass = null;
 	
 	private String index = null;
 	private String type = null;
@@ -74,11 +76,15 @@ public class ElasticLog extends Log{
 	@Override
 	public void establishConnection(Map<String, String> info) throws ElasticsearchException {
 		this.host = info.get("host");
+		this.user = info.get("user");
+		this.pass = info.get("password");
 		this.index = info.get("index");
 		this.type = info.get("type");
 		this.apiport = Integer.parseInt(info.get("apiport"));
 		this.cluster_name = info.get("cluster_name");
 		Settings settings = ImmutableSettings.settingsBuilder()
+				.put("username", this.user)
+				.put("password", this.pass)
 				.put("cluster.name", this.cluster_name)
 				.put("client.transport.ping_timeout","5s")
 				.put("client.transport.nodes_sampler_interval","5s")

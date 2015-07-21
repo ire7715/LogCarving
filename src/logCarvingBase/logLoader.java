@@ -36,6 +36,8 @@ public class logLoader {
 		propsStream.close();
 		
 		info.put("host", props.getProperty("logCarving_host"));
+		info.put("user", props.getProperty("logCarving_user"));
+		info.put("password", props.getProperty("logCarving_password"));
 		info.put("apiport", props.getProperty("logCarving_apiport"));
 		info.put("cluster_name", props.getProperty("logCarving_cluster_name"));
 		info.put("index", props.getProperty("logCarving_index"));
